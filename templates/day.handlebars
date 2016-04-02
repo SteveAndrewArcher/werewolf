@@ -1,0 +1,11 @@
+<div id="wolf"></div>
+<p>A new day has dawned!</p>
+<p id="nightresults"></p>
+<p>Who's the werewolf? Vote to hang another player, or if you don't want to vote, just press the Lock In button</p>
+<div id="votebuttons">
+	{{#players}}
+		<button id="{{name}}" class="vote" value="{{name}}" onclick="vote(this.value)">{{name}}</button><br>
+	{{/players}}
+	<button id="votelocker" onclick="lockVote()">Lock In</button>
+</div>
+<input type="hidden" id="clicked" value="">

@@ -1,0 +1,21 @@
+{
+  "name": "werewolf",
+  "version": "1.0.0",
+  "description": "web based version of the party game werewolf",
+  "main": "werewolf.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "www.github.com/SteveAndrewArcher/werewolf"
+  },
+  "author": "Steve Archer",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.4",
+    "express-handlebars": "^3.0.0",
+    "handlebars": "^4.0.5",
+    "socket.io": "^1.4.5"
+  }
+}
