@@ -91,24 +91,17 @@ io.sockets.on('connection', function(socket){
 	});
 	
 	function voteComplete(roomid){
-		console.log("made it to votecomplete")
 		for(var i=0; i<games[roomid].players.length; i++){
 			if(games[roomid].players[i].hangvotes > (games[roomid].players.length)/2){
-				console.log("someone got majority");
 				games[roomid].hanged = games[roomid].players[i].name;
-				console.log("voted for "+ games[roomid].players[i].name);
 				games[roomid].players.splice(i,1);
 				for(var j=0; j<games[roomid].werewolves.length;j++){
-					console.log("checking if wolf got hung");
 					if(games[roomid].hanged==games[roomid].werewolves[j]){
-						console.log("taking wolf out");
 						games[roomid].werewolves.splice(j,1);
 					}
 				}
 				for(var k=0; k<games[roomid].villagers.length;k++){
-					console.log("checking villagers");
 					if(games[roomid].hanged==games[roomid].villagers[k]){
-						console.log("taking villager out")
 						games[roomid].villagers.splice(k,1);
 					}
 				}
@@ -140,7 +133,6 @@ io.sockets.on('connection', function(socket){
 		for(var i=0; i<games[roomid].players.length; i++){
 			for(var j=0; j<games[roomid].players[i].killvotes.length; j++){
 				if(games[roomid].players[i].killvotes[j]==socket.id){
-					console.log("this voter's socket found in killvotes");
 					games[roomid].players[i].killvotes.splice(j,1);
 				}
 			}
@@ -153,11 +145,8 @@ io.sockets.on('connection', function(socket){
 	});
 	
 	socket.on('kill-locked', function(namekilled, roomid){
-		console.log(games[roomid].saved +"was protected by the doc");
-		console.log(namekilled + "was picked by the wolves");
 		if(games[roomid].saved==namekilled)
 		{
-			console.log(games[roomid].saved + "got saved");
 			games[roomid].hanged = "none";
 			games[roomid].totalvotes = 0;
 			for(var i=0; i<games[roomid].players.length; i++){

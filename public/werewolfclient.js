@@ -5,7 +5,6 @@ socket.on('lobby', function(room, data){
 	roomid = room;
 	$('#templatecontainer').html(Handlebars.templates.lobby(data));
 	$('#room').text("Have your friends join this room: " + roomid);
-	console.log(data);
 	if(data.players.length>5){
 		$('#templatecontainer').append('<p>Press this button when all players are in!</p><button onclick="gameStart()">Start The Game</button>');
 	}
@@ -31,12 +30,9 @@ function gameStart(){
 
 socket.on('day', function(data){
 	$('#templatecontainer').html(Handlebars.templates.day(data));
-	console.log(data);
 	if(data.werewolves.indexOf($('#thisplayer').val())!=-1){
 		$('#wolf').html("<p>You're a WEREWOLF!</p>");
 	}
-	console.log(socket.io.engine.id);
-	console.log(data.wolfsockets);
 	if(data.killed!="none" && data.killed!=data.saved){
 		$('#nightresults').text("Last night " + data.killed + " was killed by werewolves!")
 	}
@@ -59,7 +55,6 @@ function lockVote(){
 
 socket.on('night', function(data){
 	$('#templatecontainer').html(Handlebars.templates.night(data));
-	console.log(data);
 	if(data.hanged!="none"){
 		$('#dayresults').text("Today " + data.hanged + " was killed by an angry mob!");
 	}
@@ -68,7 +63,6 @@ socket.on('night', function(data){
 		$('#pick').html(Handlebars.templates.wolfpick(data));
 		for(var i=0; i<data.players.length; i++){
 			if(data.players[i].killvotes.length==data.werewolves.length && (data.saved!="none" || data.docdead) && (data.investigationcomplete || data.sheriffdead)){
-				console.log("wolf votes complete");
 				$('#clicked').val(data.players[i].name);
 				$('#templatecontainer').append('<button id="killlocker" onclick="lockKill()">Lock In Kill</button>');
 			}
@@ -80,10 +74,8 @@ socket.on('night', function(data){
 		}else{
 			$('#pick').html("");
 			if(data.werewolves.indexOf(data.accused)!=-1){
-				console.log("investigation success");
 				$('#results').text(data.accused+" IS a werewolf!");
 			}else{
-				console.log("investigation fail");
 				$('#results').text(data.accused+" is NOT a werewolf!");
 			}
 		}
@@ -117,17 +109,14 @@ function docSave(name){
 	}
 
 function sherPick(name){
-	console.log("sheriff button clicked");
 	socket.emit('sher-pick', name, roomid);
 }
 
 socket.on('wolves-win', function(){
-	console.log("wolf win");
 	$('#templatecontainer').html("<p>The wolves now outnumber the villagers, they taken over the town!</p><p>WEREWOLVES WIN!</p>");
 });
 
 socket.on('village-win', function(){
-	console.log("village win");
 	$('#templatecontainer').html("<p>The werewolves have all been eliminated, the village is safe!</p><p>VILLAGERS WIN!</p>");
 });
 
