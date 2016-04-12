@@ -1,8 +1,10 @@
+<div class="instructions">
 <p>Night has fallen! There are {{werewolves.length}} werewolves left alive.</p>
 <p>Who do you want to kill tonight, wolves? The vote must be unanimous!</p>
 <p>Wolves can even vote to kill one of their own, if they think it will throw the villagers off their scent</p>
 <p>The number next to each name shows how many wolves have selected that player.</p>
 <p>When all wolves have selected the same villager, you can lock in your selection to kill that player.</p>
+</div>
 {{#players}}
-	<button value="{{name}}" onclick="kill(this.value)">{{name}}</button><span>{{killvotes.length}}</span><br>
+	<button value="{{name}}" onclick="kill(this.value)">{{name}}</button><span class="displayvotes">{{killvotes.length}}</span><br>
 {{/players}}

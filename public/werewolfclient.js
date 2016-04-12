@@ -64,7 +64,7 @@ socket.on('night', function(data){
 		for(var i=0; i<data.players.length; i++){
 			if(data.players[i].killvotes.length==data.werewolves.length && (data.saved!="none" || data.docdead) && (data.investigationcomplete || data.sheriffdead)){
 				$('#clicked').val(data.players[i].name);
-				$('#templatecontainer').append('<button id="killlocker" onclick="lockKill()">Lock In Kill</button>');
+				$('#templatecontainer').append('<button id="killlocker" class="lockbtn" onclick="lockKill()">Lock In Kill</button>');
 			}
 		}
 	}
