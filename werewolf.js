@@ -120,13 +120,14 @@ io.sockets.on('connection', function(socket){
 		for(var i=0; i<games[roomid].players.length; i++){
 			games[roomid].players[i].killvotes = [];
 		}
-		io.sockets.in(roomid).emit('night',games[roomid]);
-		if(games[roomid].werewolves.length==0){
-			io.sockets.in(roomid).emit('village-win');
-		}
-		if(games[roomid].villagers.length<=games[roomid].werewolves.length){
-			io.sockets.in(roomid).emit('wolves-win');
-		}
+		io.sockets.in(roomid).emit('night',games[roomid],function(){
+			if(games[roomid].werewolves.length==0){
+				io.sockets.in(roomid).emit('village-win');
+			}
+			if(games[roomid].villagers.length<=games[roomid].werewolves.length){
+				io.sockets.in(roomid).emit('wolves-win');
+			}
+		});
 	}
 	
 	socket.on('kill', function(namevoted, roomid){
@@ -184,13 +185,14 @@ io.sockets.on('connection', function(socket){
 			for(var i=0; i<games[roomid].players.length; i++){
 				games[roomid].players[i].hangvotes = 0;
 			}
-			io.sockets.in(roomid).emit('day', games[roomid]);
-			if(games[roomid].werewolves.length==0){
-				io.sockets.in(roomid).emit('village-win');
-			}
-			if(games[roomid].villagers.length<=games[roomid].werewolves.length){
-				io.sockets.in(roomid).emit('wolves-win');
-			}
+			io.sockets.in(roomid).emit('day', games[roomid], function(){
+				if(games[roomid].werewolves.length==0){
+					io.sockets.in(roomid).emit('village-win');
+				}
+				if(games[roomid].villagers.length<=games[roomid].werewolves.length){
+					io.sockets.in(roomid).emit('wolves-win');
+				}
+			});
 		}
 	});
 	

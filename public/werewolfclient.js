@@ -113,7 +113,7 @@ function sherPick(name){
 }
 
 socket.on('wolves-win', function(){
-	$('#templatecontainer').html("<p>The wolves now outnumber the villagers, they taken over the town!</p><p>WEREWOLVES WIN!</p>");
+	$('#templatecontainer').html("<p>The wolves now outnumber the villagers, they have taken over the town!</p><p>WEREWOLVES WIN!</p>");
 });
 
 socket.on('village-win', function(){
