@@ -3,7 +3,10 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
-http.listen(3000, function(){
+
+app.set('port', process.env.PORT || 3000);
+
+http.listen(app.get('port'), function(){
   console.log('listening on *:3000');
 });
 app.use(express.static(__dirname + '/public'));
@@ -120,14 +123,15 @@ io.sockets.on('connection', function(socket){
 		for(var i=0; i<games[roomid].players.length; i++){
 			games[roomid].players[i].killvotes = [];
 		}
-		io.sockets.in(roomid).emit('night',games[roomid],function(){
-			if(games[roomid].werewolves.length==0){
-				io.sockets.in(roomid).emit('village-win');
-			}
-			if(games[roomid].villagers.length<=games[roomid].werewolves.length){
-				io.sockets.in(roomid).emit('wolves-win');
-			}
-		});
+		io.sockets.in(roomid).emit('night',games[roomid])
+		if(games[roomid].werewolves.length==0){
+			io.sockets.in(roomid).emit('village-win');
+			delete games[roomid];
+		}
+		if(games[roomid].villagers.length<=games[roomid].werewolves.length){
+			io.sockets.in(roomid).emit('wolves-win');
+			delete games[roomid];
+		}
 	}
 	
 	socket.on('kill', function(namevoted, roomid){
@@ -185,14 +189,15 @@ io.sockets.on('connection', function(socket){
 			for(var i=0; i<games[roomid].players.length; i++){
 				games[roomid].players[i].hangvotes = 0;
 			}
-			io.sockets.in(roomid).emit('day', games[roomid], function(){
-				if(games[roomid].werewolves.length==0){
-					io.sockets.in(roomid).emit('village-win');
-				}
-				if(games[roomid].villagers.length<=games[roomid].werewolves.length){
-					io.sockets.in(roomid).emit('wolves-win');
-				}
-			});
+			io.sockets.in(roomid).emit('day', games[roomid]);
+			if(games[roomid].werewolves.length==0){
+				io.sockets.in(roomid).emit('village-win');
+				delete games[roomid];
+			}
+			if(games[roomid].villagers.length<=games[roomid].werewolves.length){
+				io.sockets.in(roomid).emit('wolves-win');
+				delete games[roomid];
+			}
 		}
 	});
 	

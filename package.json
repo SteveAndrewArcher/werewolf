@@ -4,6 +4,7 @@
   "description": "web based version of the party game werewolf",
   "main": "werewolf.js",
   "scripts": {
+    "start": "node werewolf.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
