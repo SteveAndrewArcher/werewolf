@@ -1,18 +1,22 @@
+
+
 var socket= io();
-var roomid = ""
 
-socket.on('lobby', function(room, data){
-	roomid = room;
-	$('#templatecontainer').html(Handlebars.templates.lobby(data));
-	$('#room').text("Have your friends join this room: " + roomid);
-	if(data.players.length>5){
-		$('#templatecontainer').append('<p>Press this button when all players are in!</p><button onclick="gameStart()">Start The Game</button>');
-	}
-});
-
-socket.on('no-room', function(data){
-	$('#noroom').text(data);
-});
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
 
 function createGame(){
 	$('#thisplayer').val($('#newgamename').val());
@@ -26,7 +30,66 @@ function joinGame(){
 
 function gameStart(){
 	socket.emit('game-start', roomid);
-};
+}
+
+function vote(name){
+	$('.vote').removeClass('clicked');
+	$('#'+name).addClass('clicked');
+	$('#clicked').val(name);
+}
+
+function lockVote(){
+	$('#votelocker').remove();
+	socket.emit('vote-locked', $('#clicked').val(), roomid);
+}
+
+function kill(name){
+	socket.emit('kill', name, roomid);
+}
+	
+function lockKill(){
+	$('#killlocker').remove();
+	socket.emit('kill-locked', $('#clicked').val(), roomid);
+}
+
+function docSave(name){
+	socket.emit('doc-save', name, roomid);
+	$('#pick').html("");
+}
+
+function sherPick(name){
+	socket.emit('sher-pick', name, roomid);
+}
+
+//onload, check cookie to see if game in progress
+var roomid = getCookie("werewolfroomid")
+if(roomid != ""){
+	//game is in progress, rejoin
+	$('#thisplayer').val(getCookie("werewolfplayername"))
+	socket.emit('rejoin', roomid);
+}
+
+socket.on('lobby', function(room, data){
+	roomid = room;
+	document.cookie = "werewolfroomid="+roomid+"; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/;";
+	document.cookie = "werewolfplayername="+$('#thisplayer').val()+"; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/;";
+	$('#templatecontainer').html(Handlebars.templates.lobby(data));
+	$('#room').text("Have your friends join this room: " + roomid);
+	if(data.players.length>5){
+		$('#templatecontainer').append('<p>Press this button when all players are in!</p><button onclick="gameStart()">Start The Game</button>');
+	}
+});
+
+socket.on('no-room', function(data){
+	$('#noroom').text(data);
+});
+
+socket.on('rejoin-fail', function(){
+	document.cookie = "werewolfroomid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	document.cookie = "werewolfplayername=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+});
+
+
 
 socket.on('day', function(data){
 	$('#templatecontainer').html(Handlebars.templates.day(data));
@@ -42,16 +105,7 @@ socket.on('day', function(data){
 	}
 });
 
-function vote(name){
-	$('.vote').removeClass('clicked');
-	$('#'+name).addClass('clicked');
-	$('#clicked').val(name);
-}
 
-function lockVote(){
-	$('#votelocker').remove();
-	socket.emit('vote-locked', $('#clicked').val(), roomid);
-}
 
 socket.on('night', function(data){
 	$('#templatecontainer').html(Handlebars.templates.night(data));
@@ -93,24 +147,6 @@ socket.on('night', function(data){
 		socket.disconnect();
 	}
 });
-
-function kill(name){
-		socket.emit('kill', name, roomid);
-	}
-	
-function lockKill(){
-	$('#killlocker').remove();
-	socket.emit('kill-locked', $('#clicked').val(), roomid);
-}
-
-function docSave(name){
-		socket.emit('doc-save', name, roomid);
-		$('#pick').html("");
-	}
-
-function sherPick(name){
-	socket.emit('sher-pick', name, roomid);
-}
 
 socket.on('wolves-win', function(){
 	$('#templatecontainer').html("<p>The wolves now outnumber the villagers, they have taken over the town!</p><p>WEREWOLVES WIN!</p>");

@@ -40,6 +40,8 @@ io.sockets.on('connection', function(socket){
 			investigationcomplete:false,
 			sheriffdead:false,
 			docdead:false,
+			started:false,
+			day:true
 			}
 		
 		io.sockets.in(roomid).emit('lobby', roomid, games[roomid]);	
@@ -53,6 +55,24 @@ io.sockets.on('connection', function(socket){
 			io.sockets.in(roomid).emit('lobby', roomid, games[roomid]);
 		}else{
 			socket.emit('no-room', "That room doesn't exist!");
+		}
+	});
+
+	socket.on('rejoin', function(roomid){
+		if(games[roomid]){
+			socket.room = roomid;
+			socket.join(roomid);
+			if(games[roomid].started){
+				if(games[roomid].day){
+					socket.emit('day', games[roomid])
+				}else{
+					socket.emit('night', games[roomid])
+				}
+			}else{
+				socket.emit('lobby', roomid, games[roomid]);
+			}
+		}else{
+			socket.emit('rejoin-fail')
 		}
 	});
 	
@@ -78,6 +98,7 @@ io.sockets.on('connection', function(socket){
 		for(var i=0; i<randoms.length; i++){
 			games[roomid].villagers.push(games[roomid].players[randoms[i]].name);
 		}
+		games[roomid].started = true
 		io.sockets.in(roomid).emit('day', games[roomid]);	
 	});
 	
@@ -123,6 +144,7 @@ io.sockets.on('connection', function(socket){
 		for(var i=0; i<games[roomid].players.length; i++){
 			games[roomid].players[i].killvotes = [];
 		}
+		games[roomid].day = false;
 		io.sockets.in(roomid).emit('night',games[roomid])
 		if(games[roomid].werewolves.length==0){
 			io.sockets.in(roomid).emit('village-win');
@@ -189,6 +211,7 @@ io.sockets.on('connection', function(socket){
 			for(var i=0; i<games[roomid].players.length; i++){
 				games[roomid].players[i].hangvotes = 0;
 			}
+			game[roomid].day = true;
 			io.sockets.in(roomid).emit('day', games[roomid]);
 			if(games[roomid].werewolves.length==0){
 				io.sockets.in(roomid).emit('village-win');
