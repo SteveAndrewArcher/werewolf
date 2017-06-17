@@ -25,6 +25,7 @@ function createGame(){
 
 function joinGame(){
 	$('#thisplayer').val($('#joingamename').val());
+	$('#join').prop('disabled', true)
 	socket.emit('join-game', $('#joinroomid').val(), $('#joingamename').val());
 }
 
@@ -82,6 +83,7 @@ socket.on('lobby', function(room, data){
 
 socket.on('no-room', function(data){
 	$('#noroom').text(data);
+	$('#join').prop('disabled', false)
 });
 
 socket.on('rejoin-fail', function(){
