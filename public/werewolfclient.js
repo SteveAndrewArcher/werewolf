@@ -31,6 +31,8 @@ function joinGame(){
 
 function quit(){
 	if(confirm("Are you sure you want to quit the game?")==true){
+		document.cookie = "werewolfroomid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+		document.cookie = "werewolfplayername=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 		socket.emit('quit', roomid, $('#thisplayer').val());
 		$('#templatecontainer').html("<p>You have left the game</p>");
 		socket.disconnect();
