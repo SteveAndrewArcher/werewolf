@@ -29,6 +29,14 @@ function joinGame(){
 	socket.emit('join-game', $('#joinroomid').val(), $('#joingamename').val());
 }
 
+function quit(){
+	if(confirm("Are you sure you want to quit the game?")==true){
+		socket.emit('quit', roomid, $('#thisplayer').val());
+		$('#templatecontainer').html("<p>You have left the game</p>");
+		socket.disconnect();
+	}
+}
+
 function gameStart(){
 	socket.emit('game-start', roomid);
 }
@@ -41,6 +49,7 @@ function vote(name){
 
 function lockVote(){
 	$('#votelocker').remove();
+	$("#quit").attr("hidden",true)
 	socket.emit('vote-locked', $('#clicked').val(), roomid);
 }
 
@@ -50,6 +59,7 @@ function kill(name){
 	
 function lockKill(){
 	$('#killlocker').remove();
+	$("#quit").attr("hidden",true)
 	socket.emit('kill-locked', $('#clicked').val(), roomid);
 }
 
@@ -128,6 +138,7 @@ socket.on('night', function(data){
 		if(!data.investigationcomplete){
 			$('#pick').html(Handlebars.templates.sherpick(data));
 		}else{
+			$("#quit").attr("hidden",true)
 			$('#pick').html("");
 			if(data.werewolves.indexOf(data.accused)!=-1){
 				$('#results').text(data.accused+" IS a werewolf!");
@@ -141,6 +152,7 @@ socket.on('night', function(data){
 		if(data.saved=="none"){
 			$('#pick').html(Handlebars.templates.docpick(data));
 		}else{
+			$("#quit").attr("hidden",true)
 			$('#results').text(data.saved+" is safe from the werewolves tonight.");
 		}
 	}

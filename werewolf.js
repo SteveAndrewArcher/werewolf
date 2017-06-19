@@ -76,6 +76,31 @@ io.sockets.on('connection', function(socket){
 		}
 	});
 	
+	socket.on("quit", function(roomid, name){
+		for(var i=0; i<games[roomid].villagers.length;i++){
+			if(name==games[roomid].villagers[i]){
+				games[roomid].villagers.splice(i,1);
+			}
+		}
+		for(var i=0; i<games[roomid].werewolves.length; i++){
+			if(namekilled==games[roomid].werewolves[i]){
+				games[roomid].werewolves.splice(i,1);
+			}
+		}
+		for(var i=0; i<games[roomid].players.length; i++){
+			if(namekilled==games[roomid].players[i].name){
+				games[roomid].players.splice(i,1)
+			}
+		}
+		games[roomid].killed = name;
+		if(games[roomid].killed==games[roomid].doctor){
+		games[roomid].docdead = true;
+		}
+		if(games[roomid].killed==games[roomid].sheriff){
+		games[roomid].sheriffdead = true;
+		}
+	}
+	
 	socket.on('game-start', function(roomid){
 		var randoms = [];
 		for(var i=0; i<games[roomid].players.length; i++){
@@ -183,16 +208,14 @@ io.sockets.on('connection', function(socket){
 		}else{
 			
 			for(var i=0; i<games[roomid].villagers.length;i++){
-					if(namekilled==games[roomid].villagers[i]){
-						games[roomid].villagers.splice(i,1);
-					}
+				if(namekilled==games[roomid].villagers[i]){
+					games[roomid].villagers.splice(i,1);
 				}
-				
+			}	
 			for(var i=0; i<games[roomid].werewolves.length; i++){
 				if(namekilled==games[roomid].werewolves[i]){
 					games[roomid].werewolves.splice(i,1);
 				}
-				
 			}
 			for(var i=0; i<games[roomid].players.length; i++){
 				if(namekilled==games[roomid].players[i].name){
