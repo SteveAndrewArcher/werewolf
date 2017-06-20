@@ -99,7 +99,7 @@ io.sockets.on('connection', function(socket){
 		if(games[roomid].killed==games[roomid].sheriff){
 		games[roomid].sheriffdead = true;
 		}
-	}
+	});
 	
 	socket.on('game-start', function(roomid){
 		var randoms = [];
