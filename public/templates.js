@@ -1,5 +1,19 @@
 (function() {
   var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['lobby'] = template({"1":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return "		<li>"
+    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"name","hash":{},"data":data}) : helper)))
+    + "</li>\r\n";
+},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, options, buffer = 
+  "<p id=\"room\" class=\"instructions\"></p>\r\n<div id=\"playerlist\">\r\n<ul>\r\n";
+  stack1 = ((helper = (helper = helpers.players || (depth0 != null ? depth0.players : depth0)) != null ? helper : helpers.helperMissing),(options={"name":"players","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data}),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},options) : helper));
+  if (!helpers.players) { stack1 = helpers.blockHelperMissing.call(depth0,stack1,options)}
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "</ul>\r\n</div>\r\n\r\n\r\n	";
+},"useData":true});
 templates['day'] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
@@ -16,7 +30,10 @@ templates['day'] = template({"1":function(container,depth0,helpers,partials,data
   stack1 = ((helper = (helper = helpers.players || (depth0 != null ? depth0.players : depth0)) != null ? helper : helpers.helperMissing),(options={"name":"players","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data}),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},options) : helper));
   if (!helpers.players) { stack1 = helpers.blockHelperMissing.call(depth0,stack1,options)}
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "</div>\r\n<button id=\"votelocker\" class=\"lockbtn\" onclick=\"lockVote()\">Lock In</button>\r\n<button id=\"quit\" class=\"lockbtn\" onclick=\"quit()\" hidden=\"false\">Quit</button>\r\n<input type=\"hidden\" id=\"clicked\" value=\"\">";
+  return buffer + "</div>\r\n<button id=\"votelocker\" class=\"lockbtn\" onclick=\"lockVote()\">Lock In</button>\r\n<input type=\"hidden\" id=\"clicked\" value=\"\">";
+},"useData":true});
+templates['night'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<p id=\"dayresults\" class=\"instructions\"></p>\r\n<div id=\"pick\"></div>\r\n<input type=\"hidden\" id=\"clicked\" value=\"\">\r\n<p id=\"results\" class=\"instructions\"></p>";
 },"useData":true});
 templates['docpick'] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
@@ -33,23 +50,6 @@ templates['docpick'] = template({"1":function(container,depth0,helpers,partials,
   if (!helpers.players) { stack1 = helpers.blockHelperMissing.call(depth0,stack1,options)}
   if (stack1 != null) { buffer += stack1; }
   return buffer;
-},"useData":true});
-templates['lobby'] = template({"1":function(container,depth0,helpers,partials,data) {
-    var helper;
-
-  return "		<li>"
-    + container.escapeExpression(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"name","hash":{},"data":data}) : helper)))
-    + "</li>\r\n";
-},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1, helper, options, buffer = 
-  "<p id=\"room\" class=\"instructions\"></p>\r\n<div id=\"playerlist\">\r\n<ul>\r\n";
-  stack1 = ((helper = (helper = helpers.players || (depth0 != null ? depth0.players : depth0)) != null ? helper : helpers.helperMissing),(options={"name":"players","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data}),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},options) : helper));
-  if (!helpers.players) { stack1 = helpers.blockHelperMissing.call(depth0,stack1,options)}
-  if (stack1 != null) { buffer += stack1; }
-  return buffer + "</ul>\r\n</div>\r\n\r\n	";
-},"useData":true});
-templates['night'] = template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<p id=\"dayresults\" class=\"instructions\"></p>\r\n<div id=\"pick\"></div>\r\n<input type=\"hidden\" id=\"clicked\" value=\"\">\r\n<p id=\"results\" class=\"instructions\"></p>\r\n<button id=\"quit\" class=\"lockbtn\" onclick=\"quit()\" hidden=\"false\">Quit</button>";
 },"useData":true});
 templates['sherpick'] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;

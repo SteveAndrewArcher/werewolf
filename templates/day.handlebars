@@ -1,8 +1,8 @@
 <div id="wolf"></div>
 <div class="instructions">
-<p>A new day has dawned!</p>
-<p id="nightresults"></p>
-<p>Who's the werewolf? Vote to hang another player, or if you don't want to vote, just press the Lock In button</p>
+	<p>A new day has dawned!</p>
+	<p id="nightresults"></p>
+	<p>Who's the werewolf? Vote to hang another player, or if you don't want to vote, just press the Lock In button</p>
 </div>
 <div id="votebuttons">
 	{{#players}}
@@ -10,5 +10,4 @@
 	{{/players}}
 </div>
 <button id="votelocker" class="lockbtn" onclick="lockVote()">Lock In</button>
-<button id="quit" class="lockbtn" onclick="quit()" hidden="false">Quit</button>
 <input type="hidden" id="clicked" value="">

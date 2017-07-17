@@ -1,21 +1,19 @@
-
-
 var socket= io();
 
 function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
+	var name = cname + "=";
+	var decodedCookie = decodeURIComponent(document.cookie);
+	var ca = decodedCookie.split(';');
+	for(var i = 0; i <ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') {
+			c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+			return c.substring(name.length, c.length);
+		}
+	}
+	return "";
 }
 
 function createGame(){
@@ -26,7 +24,7 @@ function createGame(){
 function joinGame(){
 	$('#thisplayer').val($('#joingamename').val());
 	$('#join').prop('disabled', true)
-	socket.emit('join-game', $('#joinroomid').val(), $('#joingamename').val());
+	socket.emit('join-game', $('#joinroomid').val().toUpperCase(), $('#joingamename').val());
 }
 
 function quit(){
@@ -35,6 +33,7 @@ function quit(){
 		document.cookie = "werewolfplayername=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 		socket.emit('quit', roomid, $('#thisplayer').val());
 		$('#templatecontainer').html("<p>You have left the game</p>");
+		$("#quit").attr("style","display:none")
 		socket.disconnect();
 	}
 }
@@ -45,13 +44,13 @@ function gameStart(){
 
 function vote(name){
 	$('.vote').removeClass('clicked');
-	$('#'+name).addClass('clicked');
+	$("[id='"+name+"']").addClass('clicked');
 	$('#clicked').val(name);
 }
 
 function lockVote(){
 	$('#votelocker').remove();
-	$("#quit").attr("hidden",true)
+	$("#quit").attr("style","display:block")
 	socket.emit('vote-locked', $('#clicked').val(), roomid);
 }
 
@@ -61,7 +60,7 @@ function kill(name){
 	
 function lockKill(){
 	$('#killlocker').remove();
-	$("#quit").attr("hidden",true)
+	$("#quit").attr("style","display:block")
 	socket.emit('kill-locked', $('#clicked').val(), roomid);
 }
 
@@ -83,6 +82,7 @@ if(roomid != ""){
 }
 
 socket.on('lobby', function(room, data){
+	$("#quit").attr("style","display:block")
 	roomid = room;
 	document.cookie = "werewolfroomid="+roomid+"; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/;";
 	document.cookie = "werewolfplayername="+$('#thisplayer').val()+"; expires=Tue, 19 Jan 2038 03:14:07 UTC; path=/;";
@@ -106,6 +106,7 @@ socket.on('rejoin-fail', function(){
 
 
 socket.on('day', function(data){
+	$("#quit").attr("style","display:none")
 	$('#templatecontainer').html(Handlebars.templates.day(data));
 	if(data.werewolves.indexOf($('#thisplayer').val())!=-1){
 		$('#wolf').html("<p>You're a WEREWOLF!</p>");
@@ -115,6 +116,9 @@ socket.on('day', function(data){
 	}
 	if(data.killed==$('#thisplayer').val()){
 		$('#templatecontainer').html("<p>You've been killed by the werewolves!</p");
+		$("#quit").attr("style","display:none")
+		document.cookie = "werewolfroomid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+		document.cookie = "werewolfplayername=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 		socket.disconnect();
 	}
 });
@@ -122,12 +126,14 @@ socket.on('day', function(data){
 
 
 socket.on('night', function(data){
+	$("#quit").attr("style","display:block")
 	$('#templatecontainer').html(Handlebars.templates.night(data));
 	if(data.hanged!="none"){
 		$('#dayresults').text("Today " + data.hanged + " was killed by an angry mob!");
 	}
 	$('#pick').html("<p>Night has fallen! So spooky... All you can do is huddle under the covers and wait for daytime!</p>");
 	if(data.werewolves.indexOf($('#thisplayer').val())!=-1){
+		$("#quit").attr("style","display:none")
 		$('#pick').html(Handlebars.templates.wolfpick(data));
 		for(var i=0; i<data.players.length; i++){
 			if(data.players[i].killvotes.length==data.werewolves.length && (data.saved!="none" || data.docdead) && (data.investigationcomplete || data.sheriffdead)){
@@ -140,7 +146,6 @@ socket.on('night', function(data){
 		if(!data.investigationcomplete){
 			$('#pick').html(Handlebars.templates.sherpick(data));
 		}else{
-			$("#quit").attr("hidden",true)
 			$('#pick').html("");
 			if(data.werewolves.indexOf(data.accused)!=-1){
 				$('#results').text(data.accused+" IS a werewolf!");
@@ -152,23 +157,37 @@ socket.on('night', function(data){
 	if(data.doctor == $('#thisplayer').val()){
 		$('#pick').html("");
 		if(data.saved=="none"){
+			$("#quit").attr("style","display:none")
 			$('#pick').html(Handlebars.templates.docpick(data));
 		}else{
-			$("#quit").attr("hidden",true)
+			$("#quit").attr("style","display:block")
 			$('#results').text(data.saved+" is safe from the werewolves tonight.");
 		}
 	}
 	if(data.hanged==$('#thisplayer').val()){
 		$('#templatecontainer').html("<p>You were killed by an angry mob of villagers!</p>");
+		$("#quit").attr("style","display:none")
+		document.cookie = "werewolfroomid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+		document.cookie = "werewolfplayername=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 		socket.disconnect();
 	}
 });
 
-socket.on('wolves-win', function(){
+socket.on('wolves-win', function(roomid){
 	$('#templatecontainer').html("<p>The wolves now outnumber the villagers, they have taken over the town!</p><p>WEREWOLVES WIN!</p>");
+	$("#quit").attr("style","display:none")
+	document.cookie = "werewolfroomid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	document.cookie = "werewolfplayername=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	socket.emit("game-over", roomid);
+	socket.disconnect();
 });
 
-socket.on('village-win', function(){
+socket.on('village-win', function(roomid){
 	$('#templatecontainer').html("<p>The werewolves have all been eliminated, the village is safe!</p><p>VILLAGERS WIN!</p>");
+	$("#quit").attr("style","display:none")
+	document.cookie = "werewolfroomid=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	document.cookie = "werewolfplayername=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	socket.emit("game-over", roomid);
+	socket.disconnect();
 });
 

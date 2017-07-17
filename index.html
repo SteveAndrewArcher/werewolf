@@ -1,31 +1,40 @@
 <html>
-<head>
-<title>Werewolf!</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.runtime.js"></script>
-<script src="socket.io/socket.io.js"></script>
-<script src="templates.js"></script>
-<script src="werewolfclient.js"></script>
-<link rel="stylesheet" type="text/css" href="wolfstyle.css">
-</head>
-
-<body>
-<div id="templatecontainer">
-<h1 class="pagetitle">Create a game or join a game</h1>
-
-<div class="instructions">
-<p>To create a game, just enter your name, and then have your friends join using the provided room code.</p>
-<p>Or, enter a room code to join an existing game.</p>
-</div>
-<p>Create a Game! What's your name?</p><input type="text" id="newgamename"><br>
-<button onclick="createGame()">Create Game</button>
-<p>Join a Game! What's your name?</p><input type="text" id="joingamename">
-<p>And what's the room code for the game you'd like to join?</p><input type="text" id="joinroomid"><span id="error"></span><br>
-<button onclick="joinGame()">Join Game</button>
-<p id="noroom"></p>
-</div>
-<input type="hidden" id="thisplayer" value="">
-
-
-</body>
+	<head>
+		<title>Werewolf!</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Bahiana|Droid+Sans" rel="stylesheet">
+		<link rel="stylesheet" href="./css/navstyle.css">
+		<link rel="stylesheet" type="text/css" href="./css/wolfstyle.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.runtime.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src="socket.io/socket.io.js"></script>
+		<script src="templates.js"></script>
+		<script src="werewolfclient.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body id="bootstrap-override">
+		<div id="templatecontainer" class="container">
+			<div class="row">
+				<h1 class="pagetitle">Create a game or join a game</h1>
+			</div>
+			<div class="row">
+				<div class="instructions col-m-10 col-xs-10 col-m-offset-1 col-xs-offset-1">
+					<p>To create a game, just enter your name, and then have your friends join using the provided room code.</p>
+					<p>You must have at least six players to start the game</p>
+					<p>Or, enter a room code to join an existing game.</p>
+				</div>
+			</div>
+			<div class="row">
+				<p>Create a Game! What's your name?</p><input type="text" class="form-control" id="newgamename"><br>
+				<button onclick="createGame()">Create Game</button>
+				<p>Join a Game! What's your name?</p><input type="text" class="form-control" id="joingamename">
+				<p>And what's the room code for the game you'd like to join?</p><input type="text" class="form-control" id="joinroomid"><span id="error"></span><br>
+				<button onclick="joinGame()">Join Game</button>
+				<p id="noroom"></p>
+			</div>
+		</div>
+		<button id="quit" class="lockbtn" onclick="quit()" style="display:none">Quit</button>
+		<input type="hidden" id="thisplayer" value="">
+	</body>
 </html>
