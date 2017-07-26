@@ -5,7 +5,7 @@
   "main": "werewolf.js",
   "scripts": {
     "start": "node werewolf.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "istanbul cover --include-all-sources ./node_modules/jasmine/bin/jasmine.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,13 @@
     "express-handlebars": "^3.0.0",
     "handlebars": "^4.0.5",
     "socket.io": "^1.4.5"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "jasmine": "^2.6.0",
+    "karma": "^1.7.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-handlebars-preprocessor": "^0.3.0",
+    "karma-jasmine": "^2.0.0"
   }
 }

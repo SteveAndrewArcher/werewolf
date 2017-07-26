@@ -81,7 +81,7 @@ templates['wolfpick'] = template({"1":function(container,depth0,helpers,partials
     var stack1, helper, options, buffer = 
   "<div class=\"instructions\">\r\n<p>Night has fallen! There are "
     + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.werewolves : depth0)) != null ? stack1.length : stack1), depth0))
-    + " werewolves left alive.</p>\r\n<p>Who do you want to kill tonight, wolves? The vote must be unanimous!</p>\r\n<p>Wolves can even vote to kill one of their own, if they think it will throw the villagers off their scent</p>\r\n<p>The number next to each name shows how many wolves have selected that player.</p>\r\n<p>When all wolves have selected the same villager, you can lock in your selection to kill that player.</p>\r\n</div>\r\n";
+    + " werewolves left alive.</p>\r\n<p>Who do you want to kill tonight, wolves? The vote must be unanimous!</p>\r\n<p>Wolves can even vote to kill one of their own, if they think it will throw the villagers off their scent</p>\r\n<p>The number next to each name shows how many wolves have selected that player.</p>\r\n<p>When all wolves have selected the same villager, and the sheriff and doctor have completed their turns, you can lock in your selection to kill that player.</p>\r\n</div>\r\n";
   stack1 = ((helper = (helper = helpers.players || (depth0 != null ? depth0.players : depth0)) != null ? helper : helpers.helperMissing),(options={"name":"players","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data}),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},options) : helper));
   if (!helpers.players) { stack1 = helpers.blockHelperMissing.call(depth0,stack1,options)}
   if (stack1 != null) { buffer += stack1; }
